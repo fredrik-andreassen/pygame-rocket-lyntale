@@ -20,6 +20,7 @@ class Rocket(pygame.sprite.Sprite):
         self.image = self._image
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
+        
 
     def update(self):
         self.vel = vec(0, 0)
