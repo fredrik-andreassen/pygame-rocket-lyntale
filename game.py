@@ -22,7 +22,7 @@ rockets.add(Rocket())
 
 pygame.score = 0
 
-font = pygame.font.Font('./assets/dpcomic.ttf', 32)
+font = pygame.font.Font('./assets/dpcomic.ttf', 40)
 score_text = font.render(f'Score: {pygame.score}', True, (255, 255, 255))
 score_rect = score_text.get_rect()
 score_rect.topleft = (5, 5)
