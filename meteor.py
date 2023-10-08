@@ -2,6 +2,7 @@ import pygame
 import random
 
 from options import *
+from assets import *
 
 
 vec = pygame.math.Vector2
@@ -13,36 +14,35 @@ class Meteor(pygame.sprite.Sprite):
 
         self.pos = vec(0, 0)
         self.vel = vec(0, 0)
-        self.angle = random.randint(-30, 30)
+
+        self.image = pygame.transform.scale_by(METEOR_IMAGE, METEOR_SIZE_SCALE)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.pos
 
         spawn_side = random.choice(['top', 'bottom', 'left', 'right'])
 
-        if spawn_side == 'top':
+        if spawn_side in ['top', 'bottom']:
             self.pos.x = random.randint(-METEOR_SPAWN_PADDING, WIDTH + METEOR_SPAWN_PADDING)
-            self.pos.y = -METEOR_SPAWN_PADDING
-            self.vel.y = 3
+            
+            if spawn_side == 'top':
+                self.pos.y = -METEOR_SPAWN_PADDING
+                self.vel.y = METEOR_SPEED
+            else:
+                self.pos.y = HEIGHT + METEOR_SPAWN_PADDING
+                self.vel.y = -METEOR_SPEED
 
-        elif spawn_side == 'bottom':
-            self.pos.x = random.randint(-METEOR_SPAWN_PADDING, WIDTH + METEOR_SPAWN_PADDING)
-            self.pos.y = HEIGHT + METEOR_SPAWN_PADDING
-            self.vel.y = -3
-        
-        elif spawn_side == 'left':
-            self.pos.x = -METEOR_SPAWN_PADDING
+        elif spawn_side in ['left', 'right']:
             self.pos.y = random.randint(-METEOR_SPAWN_PADDING, HEIGHT + METEOR_SPAWN_PADDING)
-            self.vel.x = 3
 
-        elif spawn_side == 'right':
-            self.pos.x = WIDTH + METEOR_SPAWN_PADDING
-            self.pos.y = random.randint(-METEOR_SPAWN_PADDING, HEIGHT + METEOR_SPAWN_PADDING)
-            self.vel.x = -3
+            if spawn_side == 'left':
+                self.pos.x = -METEOR_SPAWN_PADDING
+                self.vel.x = METEOR_SPEED
 
-        self._image = pygame.image.load('./assets/meteor.png').convert_alpha()
-        self._image = pygame.transform.scale_by(self._image, 1.8)
+            elif spawn_side == 'right':
+                self.pos.x = WIDTH + METEOR_SPAWN_PADDING
+                self.vel.x = -METEOR_SPEED
 
-        self.image = self._image
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+        self.vel = self.vel.rotate(random.randint(-30, 30))
 
 
     def update(self):
@@ -50,6 +50,6 @@ class Meteor(pygame.sprite.Sprite):
             self.kill()
             pygame.score += 1
 
-        self.pos += self.vel.rotate(self.angle)
+        self.pos += self.vel
         self.rect = self.image.get_rect()
         self.rect.center = self.pos

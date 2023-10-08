@@ -1,29 +1,27 @@
 import pygame
+from options import *
+
+pygame.init()
+display = pygame.display.set_mode((WIDTH, HEIGHT))
+
 import sys, random, time
 
-from options import *
+from assets import *
 from rocket import Rocket
 from meteor import Meteor
 
 
-pygame.init()
 pygame.display.set_caption('pygame-rocket')
 
 clock = pygame.time.Clock()
 
-
-display = pygame.display.set_mode((WIDTH, HEIGHT))
-background = pygame.image.load('./assets/stars.jpg').convert()
-
 rockets = pygame.sprite.Group()
 meteors = pygame.sprite.Group()
-
 rockets.add(Rocket())
 
 pygame.score = 0
 
-font = pygame.font.Font('./assets/dpcomic.ttf', 40)
-score_text = font.render(f'Score: {pygame.score}', True, (255, 255, 255))
+score_text = SCORE_FONT_TYPE.render(f'Score: {pygame.score}', False, SCORE_FONT_COLOR)
 score_rect = score_text.get_rect()
 score_rect.topleft = (5, 5)
 
@@ -39,11 +37,11 @@ while True:
     rockets.update()
     meteors.update()
 
-    display.blit(background, (0, 0))
+    display.blit(BACKGROUND_IMAGE, (0, 0))
     rockets.draw(display)
     meteors.draw(display)
     
-    score_text = font.render(f'Score: {pygame.score}', True, (255, 255, 255))
+    score_text = SCORE_FONT_TYPE.render(f'Score: {pygame.score}', False, SCORE_FONT_COLOR)
     display.blit(score_text, score_rect)
 
     if pygame.sprite.groupcollide(rockets, meteors, False, False):

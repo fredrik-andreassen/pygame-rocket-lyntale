@@ -1,6 +1,7 @@
 import pygame
 
 from options import *
+from assets import *
 
 
 vec = pygame.math.Vector2
@@ -14,12 +15,18 @@ class Rocket(pygame.sprite.Sprite):
         self.vel = vec(0, 0)
         self.rot = 0
 
-        self._image = pygame.image.load('./assets/rocket.png').convert_alpha()
-        self._image = pygame.transform.scale_by(self._image, 1.6)
+        self._update_image()
+        self._update_rect()
+    
 
-        self.image = self._image
+    def _update_image(self):
+        self.image = pygame.transform.scale_by(ROCKET_IMAGE, ROCKET_SIZE_SCALE)
+        self.image = pygame.transform.rotate(self.image, -self.rot)
+    
+
+    def _update_rect(self):
         self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+        self.rect.center = self.pos        
         
 
     def update(self):
@@ -28,28 +35,18 @@ class Rocket(pygame.sprite.Sprite):
         keys_pressed = pygame.key.get_pressed()
 
         if keys_pressed[pygame.K_SPACE]:
-            self.vel = vec(3, 0).rotate(self.rot)
+            self.vel = vec(ROCKET_SPEED, 0).rotate(self.rot)
         
         if keys_pressed[pygame.K_LEFT]:
-            self.rot = (self.rot - 2) % 360
+            self.rot = (self.rot - ROCKET_ROTATION_SPEED) % 360
 
         if keys_pressed[pygame.K_RIGHT]:
-            self.rot = (self.rot + 2) % 360
+            self.rot = (self.rot + ROCKET_ROTATION_SPEED) % 360
 
         self.pos += self.vel
+        
+        self.pos.x = self.pos.x % WIDTH
+        self.pos.y = self.pos.y % HEIGHT
 
-        if self.pos.x > WIDTH:
-            self.pos.x = 0
-        
-        if self.pos.x < 0:
-            self.pos.x = WIDTH
-        
-        if self.pos.y > HEIGHT:
-            self.pos.y = 0
-        
-        if self.pos.y < 0:
-            self.pos.y = HEIGHT
-
-        self.image = pygame.transform.rotate(self._image, -self.rot)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+        self._update_image()
+        self._update_rect()
