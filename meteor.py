@@ -5,6 +5,10 @@ from options import *
 from assets import *
 
 
+class score:
+    score = 0
+
+
 vec = pygame.math.Vector2
 
 class Meteor(pygame.sprite.Sprite):
@@ -48,7 +52,7 @@ class Meteor(pygame.sprite.Sprite):
     def update(self):
         if self.pos.x < -METEOR_SPAWN_PADDING or self.pos.x > WIDTH + METEOR_SPAWN_PADDING or self.pos.y < -METEOR_SPAWN_PADDING or self.pos.y > HEIGHT + METEOR_SPAWN_PADDING:
             self.kill()
-            pygame.score += 1
+            score.score += 1
 
         self.pos += self.vel
         self.rect = self.image.get_rect()

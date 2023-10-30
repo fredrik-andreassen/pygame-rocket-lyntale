@@ -8,7 +8,7 @@ import sys, random, time
 
 from assets import *
 from rocket import Rocket
-from meteor import Meteor
+from meteor import Meteor, score
 
 
 pygame.display.set_caption('pygame-rocket')
@@ -19,9 +19,7 @@ rockets = pygame.sprite.Group()
 meteors = pygame.sprite.Group()
 rockets.add(Rocket())
 
-pygame.score = 0
-
-score_text = SCORE_FONT_TYPE.render(f'Score: {pygame.score}', False, SCORE_FONT_COLOR)
+score_text = SCORE_FONT_TYPE.render(f'Score: {score.score}', False, SCORE_FONT_COLOR)
 score_rect = score_text.get_rect()
 score_rect.topleft = (5, 5)
 
@@ -41,12 +39,12 @@ while True:
     rockets.draw(display)
     meteors.draw(display)
     
-    score_text = SCORE_FONT_TYPE.render(f'Score: {pygame.score}', False, SCORE_FONT_COLOR)
+    score_text = SCORE_FONT_TYPE.render(f'Score: {score.score}', False, SCORE_FONT_COLOR)
     display.blit(score_text, score_rect)
 
     if pygame.sprite.groupcollide(rockets, meteors, False, False):
         time.sleep(3)
-        pygame.score = 0
+        score.score = 0
         rockets.empty()
         meteors.empty()
         rockets.add(Rocket())
